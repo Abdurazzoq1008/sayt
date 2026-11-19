@@ -115,7 +115,7 @@
   const mouse = {
     x: -2000,
     y: -2000,
-    radius: 140, // Sichqoncha ta'sir radiusi
+    radius: 85, // Sichqoncha ta'sir radiusi
     active: false
   };
   const trailParticles = [];
