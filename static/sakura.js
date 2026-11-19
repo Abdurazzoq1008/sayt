@@ -18,20 +18,41 @@
       const flower = document.createElement('div');
       flower.className = 'flower-3d flower-3d--' + name;
 
-      for (let i = 0; i < 8; i++) {
-        const petal = document.createElement('span');
-        petal.className = 'flower-3d__petal';
-        petal.style.setProperty('--petal-angle', (i * 45) + 'deg');
-        flower.appendChild(petal);
-      }
+      const stem = document.createElement('span');
+      stem.className = 'flower-3d__stem';
+      flower.appendChild(stem);
 
       const leftLeaf = document.createElement('span');
       leftLeaf.className = 'flower-3d__leaf';
       const rightLeaf = document.createElement('span');
       rightLeaf.className = 'flower-3d__leaf flower-3d__leaf--right';
+      flower.append(leftLeaf, rightLeaf);
+
+      for (let i = 0; i < 12; i++) {
+        const petal = document.createElement('span');
+        petal.className = 'flower-3d__petal flower-3d__petal--outer';
+        petal.style.setProperty('--petal-angle', (i * 30) + 'deg');
+        flower.appendChild(petal);
+      }
+
+      for (let i = 0; i < 8; i++) {
+        const petal = document.createElement('span');
+        petal.className = 'flower-3d__petal flower-3d__petal--inner';
+        petal.style.setProperty('--petal-angle', (i * 45 + 22.5) + 'deg');
+        flower.appendChild(petal);
+      }
+
       const center = document.createElement('span');
       center.className = 'flower-3d__center';
-      flower.append(leftLeaf, rightLeaf, center);
+      flower.appendChild(center);
+
+      for (let i = 0; i < 12; i++) {
+        const stamen = document.createElement('span');
+        stamen.className = 'flower-3d__stamen';
+        stamen.style.setProperty('--stamen-angle', (i * 30) + 'deg');
+        flower.appendChild(stamen);
+      }
+
       scene.appendChild(flower);
     });
 

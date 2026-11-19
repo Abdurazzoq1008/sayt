@@ -99,6 +99,7 @@ body::before {
   left: 3vw;
   --flower-main: #e9688b;
   --flower-light: #ffe3eb;
+  --flower-highlight: #fff9fb;
   --flower-shadow: #9e3457;
 }
 
@@ -109,6 +110,7 @@ body::before {
   animation-delay: -2.5s;
   --flower-main: #b57bd0;
   --flower-light: #f7e5ff;
+  --flower-highlight: #fffaff;
   --flower-shadow: #623478;
 }
 
@@ -119,6 +121,7 @@ body::before {
   animation-delay: -5s;
   --flower-main: #f29b62;
   --flower-light: #fff0cf;
+  --flower-highlight: #fffdf0;
   --flower-shadow: #a64c38;
 }
 
@@ -129,50 +132,126 @@ body::before {
   animation-delay: -3.5s;
   --flower-main: #e768a5;
   --flower-light: #ffe4f1;
+  --flower-highlight: #fff9fc;
   --flower-shadow: #8e3569;
 }
 
-.flower-3d__petal {
+.flower-3d__stem {
   position: absolute;
-  top: 7%;
-  left: 32%;
-  width: 36%;
-  height: 46%;
-  border-radius: 52% 52% 46% 46%;
-  transform-origin: 50% 94%;
-  transform: rotate(var(--petal-angle)) rotateX(18deg) translateZ(5px);
-  background: radial-gradient(ellipse at 42% 25%, #fff 0%, var(--flower-light) 13%, var(--flower-main) 55%, var(--flower-shadow) 100%);
-  box-shadow: inset -5px -7px 10px rgba(53, 14, 33, 0.22), 2px 4px 8px rgba(50, 10, 28, 0.18);
-}
-
-.flower-3d__center {
-  position: absolute;
-  top: 43%;
-  left: 43%;
-  width: 14%;
-  aspect-ratio: 1;
+  top: 54%;
+  left: 48.5%;
+  width: 3%;
+  height: 42%;
   border-radius: 50%;
-  transform: translateZ(22px);
-  background: radial-gradient(circle at 35% 30%, #fff5c2, #ffc75d 45%, #c77b32 100%);
-  box-shadow: 2px 4px 9px rgba(40, 18, 8, 0.35);
+  transform: rotate(4deg) translateZ(-12px);
+  background: linear-gradient(90deg, #315c3d, #8cac64 48%, #315c3d);
+  box-shadow: 2px 3px 6px rgba(13, 35, 18, 0.3);
 }
 
 .flower-3d__leaf {
   position: absolute;
-  top: 57%;
-  left: 15%;
-  width: 31%;
-  height: 16%;
+  top: 61%;
+  left: 13%;
+  width: 34%;
+  height: 17%;
   border-radius: 0 90% 0 90%;
   transform: rotate(-28deg) rotateX(46deg) translateZ(-7px);
-  background: linear-gradient(135deg, #a5c78b, #477b58 70%, #31583e);
-  box-shadow: inset -3px -3px 6px rgba(20, 45, 28, 0.3);
+  background: linear-gradient(135deg, #c0d99a 0%, #66935c 52%, #31583e 100%);
+  box-shadow: inset -3px -4px 7px rgba(20, 45, 28, 0.3), 1px 3px 5px rgba(20, 45, 28, 0.2);
+}
+
+.flower-3d__leaf::after {
+  content: "";
+  position: absolute;
+  top: 48%;
+  left: 12%;
+  width: 78%;
+  height: 2px;
+  border-radius: 50%;
+  transform: rotate(-25deg);
+  background: rgba(224, 240, 178, 0.7);
 }
 
 .flower-3d__leaf--right {
   left: auto;
-  right: 14%;
+  right: 12%;
   transform: rotate(28deg) rotateX(46deg) translateZ(-7px);
+}
+
+.flower-3d__petal {
+  position: absolute;
+  top: 4%;
+  left: 32%;
+  width: 36%;
+  height: 46%;
+  border-radius: 55% 55% 48% 48% / 68% 68% 32% 32%;
+  transform-origin: 50% 94%;
+  transform: rotate(var(--petal-angle)) rotateX(18deg) translateZ(5px);
+  background: radial-gradient(ellipse at 38% 19%, var(--flower-highlight) 0%, var(--flower-light) 13%, var(--flower-main) 53%, var(--flower-shadow) 100%);
+  box-shadow: inset -6px -9px 12px rgba(53, 14, 33, 0.24), inset 3px 2px 7px rgba(255, 255, 255, 0.35), 2px 5px 8px rgba(50, 10, 28, 0.2);
+  z-index: 2;
+}
+
+.flower-3d__petal::after {
+  content: "";
+  position: absolute;
+  top: 13%;
+  bottom: 12%;
+  left: 48%;
+  width: 4%;
+  border-radius: 50%;
+  transform: translateZ(1px);
+  background: linear-gradient(to bottom, transparent, rgba(255, 241, 245, 0.5) 45%, rgba(80, 25, 45, 0.17), transparent);
+}
+
+.flower-3d__petal--inner {
+  top: 17%;
+  left: 37%;
+  width: 26%;
+  height: 35%;
+  transform: rotate(var(--petal-angle)) rotateX(14deg) translateZ(14px);
+  background: radial-gradient(ellipse at 38% 18%, #fff 0%, var(--flower-light) 17%, var(--flower-main) 64%, var(--flower-shadow) 100%);
+  box-shadow: inset -4px -6px 9px rgba(53, 14, 33, 0.22), 1px 3px 6px rgba(50, 10, 28, 0.2);
+  z-index: 3;
+}
+
+.flower-3d--two .flower-3d__petal--outer {
+  border-radius: 50% 50% 34% 34% / 82% 82% 18% 18%;
+}
+
+.flower-3d--three .flower-3d__petal--outer {
+  border-radius: 48% 52% 46% 46% / 62% 62% 38% 38%;
+}
+
+.flower-3d--four .flower-3d__petal--inner {
+  height: 38%;
+  border-radius: 58% 58% 40% 40% / 74% 74% 26% 26%;
+}
+
+.flower-3d__center {
+  position: absolute;
+  top: 42%;
+  left: 42%;
+  width: 16%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  transform: translateZ(24px);
+  background: radial-gradient(circle at 33% 28%, #fff9d1 0%, #ffd565 34%, #e89a35 68%, #8c4a24 100%);
+  box-shadow: inset -3px -4px 7px rgba(91, 47, 15, 0.35), 2px 4px 9px rgba(40, 18, 8, 0.4);
+  z-index: 4;
+}
+
+.flower-3d__stamen {
+  position: absolute;
+  top: 49%;
+  left: 49%;
+  width: 3%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  transform: rotate(var(--stamen-angle)) translateY(-280%) translateZ(28px);
+  background: radial-gradient(circle at 30% 25%, #fffde1, #ffdb70 55%, #c97827);
+  box-shadow: 0 1px 3px rgba(72, 39, 12, 0.4);
+  z-index: 5;
 }
 
 @keyframes flower-float {
@@ -185,7 +264,7 @@ body::before {
 }
 
 [data-theme="dark"] .flower-3d {
-  opacity: 0.78;
+  opacity: 0.86;
 }
 
 @media (max-width: 768px) {
