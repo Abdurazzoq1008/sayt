@@ -18,7 +18,7 @@
   --bg-color: #faf9f7;
   --text-color: #222225;
   --card-bg: #ffffff;
-  --hero-bg: linear-gradient(135deg, #fef4f6 0%, #fff 100%);
+  --hero-bg: linear-gradient(135deg, rgba(254, 244, 246, 0.84) 0%, rgba(255, 255, 255, 0.86) 100%);
   --section-bg: transparent;
   --input-bg: #ffffff;
   --drawer-bg: #ffffff;
@@ -34,7 +34,7 @@
   --border: #333333;
   --card-bg: #1e1e1e;
   --primary-light: #2d1a22;
-  --hero-bg: linear-gradient(135deg, #1a1015 0%, #121212 100%);
+  --hero-bg: linear-gradient(135deg, rgba(26, 16, 21, 0.84) 0%, rgba(18, 18, 18, 0.86) 100%);
   --section-bg: transparent;
   --input-bg: #2a2a2a;
   --drawer-bg: #1e1e1e;
@@ -90,7 +90,7 @@ body::before {
   width: clamp(115px, 17vw, 230px);
   aspect-ratio: 1;
   transform-style: preserve-3d;
-  opacity: 0.46;
+  opacity: 0.62;
   animation: flower-float 8s ease-in-out infinite;
 }
 
@@ -185,7 +185,7 @@ body::before {
 }
 
 [data-theme="dark"] .flower-3d {
-  opacity: 0.68;
+  opacity: 0.78;
 }
 
 @media (max-width: 768px) {
@@ -1057,7 +1057,7 @@ body::before {
 }
 
 [data-theme="dark"] .hero {
-  background: linear-gradient(135deg, #1a0f14 0%, #121212 100%);
+  background: var(--hero-bg);
 }
 
 [data-theme="dark"] .feature-box,
