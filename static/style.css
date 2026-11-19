@@ -75,7 +75,7 @@ body::before {
 }
 
 .flower-scene {
-  position: absolute;
+  position: fixed;
   inset: 0;
   overflow: hidden;
   z-index: 1;
@@ -92,7 +92,6 @@ body::before {
   aspect-ratio: 1;
   transform-style: preserve-3d;
   opacity: 0.62;
-  animation: flower-float 8s ease-in-out infinite;
 }
 
 .flower-3d--one {
@@ -253,15 +252,6 @@ body::before {
   background: radial-gradient(circle at 30% 25%, #fffde1, #ffdb70 55%, #c97827);
   box-shadow: 0 1px 3px rgba(72, 39, 12, 0.4);
   z-index: 5;
-}
-
-@keyframes flower-float {
-  0%, 100% {
-    transform: translateY(0) rotateX(8deg) rotateY(-12deg) rotateZ(-4deg);
-  }
-  50% {
-    transform: translateY(-14px) rotateX(-4deg) rotateY(12deg) rotateZ(5deg);
-  }
 }
 
 [data-theme="dark"] .flower-3d {
