@@ -74,6 +74,30 @@ body::before {
   transition: transform 0.12s linear;
 }
 
+body::after {
+  content: "";
+  position: fixed;
+  top: 24vh;
+  right: clamp(24px, 8vw, 150px);
+  width: clamp(160px, 30vw, 420px);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  z-index: 1;
+  pointer-events: none;
+  opacity: 0.3;
+  background:
+    radial-gradient(ellipse at 30% 24%, rgba(255, 255, 255, 0.85) 0 3%, rgba(255, 255, 255, 0.24) 9%, transparent 19%),
+    radial-gradient(circle at 34% 32%, #f8cad8 0%, #d96f8d 32%, #a94466 58%, rgba(112, 42, 70, 0.9) 72%, transparent 74%);
+  box-shadow: inset -24px -28px 42px rgba(48, 10, 28, 0.28), 0 0 80px rgba(201, 74, 110, 0.22);
+  transform: translate(var(--bg-x), var(--bg-y));
+  transition: transform 0.12s linear;
+}
+
+[data-theme="dark"] body::after {
+  opacity: 0.38;
+  filter: saturate(1.15);
+}
+
 #sakura-canvas {
   position: fixed;
   top: 0;

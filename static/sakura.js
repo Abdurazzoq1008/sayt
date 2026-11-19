@@ -130,7 +130,7 @@
       this.y = initial
         ? Math.random() * pageHeight
         : -30 - Math.random() * 60;
-      this.size = Math.random() * 10 + 14;
+      this.size = Math.random() * 5 + 8;
       this.speedY = Math.random() * 1.2 + 0.8;
       this.speedX = Math.random() * 0.8 - 0.2; // Yengil shamol oqimi
       this.rotation = Math.random() * Math.PI * 2;
