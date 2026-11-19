@@ -729,6 +729,7 @@ body::before {
 
 .product-card.is-tilting {
   transform: perspective(1000px) rotateX(var(--tilt-x, 2deg)) rotateY(var(--tilt-y, -5deg)) translateY(-6px);
+  z-index: 4;
 }
 
 .product-card:nth-child(even).is-tilting {

@@ -118,6 +118,76 @@
     radius: 140, // Sichqoncha ta'sir radiusi
     active: false
   };
+  const trailParticles = [];
+  let previousTrailPosition = null;
+
+  function addTrailParticles(x, y) {
+    if (previousTrailPosition) {
+      const dx = x - previousTrailPosition.x;
+      const dy = y - previousTrailPosition.y;
+      const distance = Math.sqrt(dx * dx + dy * dy);
+
+      if (distance > 4) {
+        const count = Math.min(3, Math.max(1, Math.floor(distance / 14)));
+        const colors = ['#fff0f5', '#ffb2ca', '#f26991'];
+
+        for (let i = 1; i <= count; i++) {
+          const progress = i / count;
+          const life = 28 + Math.random() * 16;
+          trailParticles.push({
+            x: previousTrailPosition.x + dx * progress + (Math.random() - 0.5) * 6,
+            y: previousTrailPosition.y + dy * progress + (Math.random() - 0.5) * 6,
+            vx: (-dx / distance) * 0.35 + (Math.random() - 0.5) * 0.35,
+            vy: (-dy / distance) * 0.35 + Math.random() * 0.25,
+            size: Math.random() * 2 + 2,
+            life,
+            maxLife: life,
+            rotation: Math.random() * Math.PI * 2,
+            rotationSpeed: (Math.random() - 0.5) * 0.08,
+            color: colors[Math.floor(Math.random() * colors.length)]
+          });
+        }
+
+        if (trailParticles.length > 90) {
+          trailParticles.splice(0, trailParticles.length - 90);
+        }
+      }
+    }
+
+    previousTrailPosition = { x, y };
+  }
+
+  function drawTrailParticles() {
+    for (let i = trailParticles.length - 1; i >= 0; i--) {
+      const particle = trailParticles[i];
+      particle.life--;
+      if (particle.life <= 0) {
+        trailParticles.splice(i, 1);
+        continue;
+      }
+
+      particle.x += particle.vx;
+      particle.y += particle.vy;
+      particle.vx *= 0.97;
+      particle.vy *= 0.97;
+      particle.rotation += particle.rotationSpeed;
+
+      ctx.save();
+      ctx.translate(particle.x, particle.y);
+      ctx.rotate(particle.rotation);
+      ctx.globalAlpha = particle.life / particle.maxLife;
+      ctx.fillStyle = particle.color;
+      ctx.shadowColor = particle.color;
+      ctx.shadowBlur = 5;
+      ctx.beginPath();
+      ctx.ellipse(0, -particle.size * 0.55, particle.size * 0.32, particle.size * 0.62, 0, 0, Math.PI * 2);
+      ctx.ellipse(particle.size * 0.55, 0, particle.size * 0.32, particle.size * 0.62, Math.PI / 2, 0, Math.PI * 2);
+      ctx.ellipse(0, particle.size * 0.55, particle.size * 0.32, particle.size * 0.62, 0, 0, Math.PI * 2);
+      ctx.ellipse(-particle.size * 0.55, 0, particle.size * 0.32, particle.size * 0.62, Math.PI / 2, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
+    }
+  }
 
   window.addEventListener('scroll', () => {
     const nextScrollY = window.scrollY;
@@ -130,6 +200,7 @@
   }, { passive: true });
 
   window.addEventListener('mousemove', (e) => {
+    addTrailParticles(e.clientX, e.clientY);
     mouse.x = e.clientX;
     mouse.y = e.clientY + scrollY;
     mouse.active = true;
@@ -145,6 +216,7 @@
     mouse.active = false;
     mouse.x = -2000;
     mouse.y = -2000;
+    previousTrailPosition = null;
     document.documentElement.style.setProperty('--bg-x', '0px');
     document.documentElement.style.setProperty('--bg-y', '0px');
   });
@@ -152,6 +224,7 @@
   // Mobil qurilmalarda teginish (touch) uchun
   window.addEventListener('touchmove', (e) => {
     if (e.touches && e.touches.length > 0) {
+      addTrailParticles(e.touches[0].clientX, e.touches[0].clientY);
       mouse.x = e.touches[0].clientX;
       mouse.y = e.touches[0].clientY + scrollY;
       mouse.active = true;
@@ -166,6 +239,7 @@
     mouse.active = false;
     mouse.x = -2000;
     mouse.y = -2000;
+    previousTrailPosition = null;
     document.documentElement.style.setProperty('--bg-x', '0px');
     document.documentElement.style.setProperty('--bg-y', '0px');
   });
@@ -346,6 +420,7 @@
   function animate() {
     ctx.clearRect(0, 0, width, height);
     updateShelves();
+    drawTrailParticles();
     for (let i = 0; i < petals.length; i++) {
       petals[i].update();
       petals[i].draw();
