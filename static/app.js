@@ -20,6 +20,29 @@ function setupEventListeners() {
     });
   });
 
+  const productCards = document.querySelectorAll('.product-card');
+  productCards.forEach(card => {
+    const sideBias = card.matches(':nth-child(even)') ? 3 : -3;
+
+    card.addEventListener('pointermove', event => {
+      if (event.pointerType === 'touch') return;
+
+      const rect = card.getBoundingClientRect();
+      const relativeX = (event.clientX - rect.left) / rect.width;
+      const relativeY = (event.clientY - rect.top) / rect.height;
+      const tiltX = (0.5 - relativeY) * 4;
+      const tiltY = sideBias + (0.5 - relativeX) * 4;
+
+      card.style.setProperty('--tilt-x', tiltX.toFixed(2) + 'deg');
+      card.style.setProperty('--tilt-y', tiltY.toFixed(2) + 'deg');
+    });
+
+    card.addEventListener('pointerleave', () => {
+      card.style.removeProperty('--tilt-x');
+      card.style.removeProperty('--tilt-y');
+    });
+  });
+
   // Delivery toggle in checkout
   const toggleBtns = document.querySelectorAll('.toggle-option');
   toggleBtns.forEach(btn => {

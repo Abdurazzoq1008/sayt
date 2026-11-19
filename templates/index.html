@@ -193,7 +193,23 @@
           </ul>
         </div>
         <div>
-          <img src="https://images.unsplash.com/photo-1508615039623-a25605d2b022?auto=format&fit=crop&w=800&q=80" alt="Flower delivery" style="width: 100%; border-radius: 20px; box-shadow: var(--shadow);">
+          <div class="store-map-frame">
+            <iframe
+              class="store-map"
+              src="https://maps.google.com/maps?q={{ store.STORE_ADDRESS | urlencode }}&z=15&output=embed"
+              title="Do'kon joylashuvi xaritasi"
+              loading="lazy"
+              referrerpolicy="no-referrer-when-downgrade"
+              allowfullscreen>
+            </iframe>
+          </div>
+          <a
+            class="store-map-link"
+            href="https://www.google.com/maps/search/?api=1&query={{ store.STORE_ADDRESS | urlencode }}"
+            target="_blank"
+            rel="noopener noreferrer">
+            Google Mapsda ochish ↗
+          </a>
         </div>
       </div>
     </div>
