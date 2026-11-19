@@ -8,6 +8,36 @@
     document.body.appendChild(canvas);
   }
 
+  if (!document.getElementById('flower-scene')) {
+    const scene = document.createElement('div');
+    scene.id = 'flower-scene';
+    scene.className = 'flower-scene';
+    scene.setAttribute('aria-hidden', 'true');
+
+    ['one', 'two', 'three', 'four'].forEach(name => {
+      const flower = document.createElement('div');
+      flower.className = 'flower-3d flower-3d--' + name;
+
+      for (let i = 0; i < 8; i++) {
+        const petal = document.createElement('span');
+        petal.className = 'flower-3d__petal';
+        petal.style.setProperty('--petal-angle', (i * 45) + 'deg');
+        flower.appendChild(petal);
+      }
+
+      const leftLeaf = document.createElement('span');
+      leftLeaf.className = 'flower-3d__leaf';
+      const rightLeaf = document.createElement('span');
+      rightLeaf.className = 'flower-3d__leaf flower-3d__leaf--right';
+      const center = document.createElement('span');
+      center.className = 'flower-3d__center';
+      flower.append(leftLeaf, rightLeaf, center);
+      scene.appendChild(flower);
+    });
+
+    document.body.appendChild(scene);
+  }
+
   const ctx = canvas.getContext('2d');
   let width = (canvas.width = window.innerWidth);
   let height = (canvas.height = window.innerHeight);
