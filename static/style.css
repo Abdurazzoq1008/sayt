@@ -78,13 +78,13 @@ body::after {
   content: "";
   position: fixed;
   top: 24vh;
-  right: clamp(24px, 8vw, 150px);
-  width: clamp(160px, 30vw, 420px);
+  right: -8vw;
+  width: clamp(180px, 38vw, 460px);
   aspect-ratio: 1;
   border-radius: 50%;
   z-index: 1;
   pointer-events: none;
-  opacity: 0.3;
+  opacity: 0.42;
   background:
     radial-gradient(ellipse at 30% 24%, rgba(255, 255, 255, 0.85) 0 3%, rgba(255, 255, 255, 0.24) 9%, transparent 19%),
     radial-gradient(circle at 34% 32%, #f8cad8 0%, #d96f8d 32%, #a94466 58%, rgba(112, 42, 70, 0.9) 72%, transparent 74%);
@@ -94,7 +94,7 @@ body::after {
 }
 
 [data-theme="dark"] body::after {
-  opacity: 0.38;
+  opacity: 0.48;
   filter: saturate(1.15);
 }
 
