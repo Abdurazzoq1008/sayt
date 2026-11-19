@@ -18,11 +18,43 @@
     height
   );
   let pageHeight = getPageHeight();
+  const shelves = [];
+  const shelfByElement = new Map();
+  let lastShelfUpdate = 0;
 
   function updateDimensions() {
     width = canvas.width = window.innerWidth;
     height = canvas.height = window.innerHeight;
     pageHeight = getPageHeight();
+    updateShelves();
+  }
+
+  function updateShelves() {
+    const now = performance.now();
+    if (now - lastShelfUpdate < 700) return;
+    lastShelfUpdate = now;
+    shelves.length = 0;
+
+    document.querySelectorAll('.product-card, #delivery').forEach(element => {
+      const rect = element.getBoundingClientRect();
+      if (rect.width <= 0) return;
+
+      let shelf = shelfByElement.get(element);
+      if (!shelf) {
+        shelf = { element, buckets: [] };
+        shelfByElement.set(element, shelf);
+      }
+
+      shelf.left = element.id === 'delivery' ? 0 : rect.left;
+      shelf.width = element.id === 'delivery' ? width : rect.width;
+      shelf.y = (element.id === 'delivery' ? rect.bottom : rect.top) + scrollY;
+      shelf.bucketCount = Math.ceil(shelf.width / 18);
+      shelf.buckets.length = shelf.bucketCount;
+      for (let i = 0; i < shelf.bucketCount; i++) {
+        if (typeof shelf.buckets[i] !== 'number') shelf.buckets[i] = 0;
+      }
+      shelves.push(shelf);
+    });
   }
 
   window.addEventListener('resize', updateDimensions);
@@ -43,6 +75,7 @@
     }
     scrollY = nextScrollY;
     pageHeight = getPageHeight();
+    updateShelves();
   }, { passive: true });
 
   window.addEventListener('mousemove', (e) => {
@@ -107,6 +140,10 @@
       this.opacity = Math.random() * 0.15 + 0.85;
       this.settled = false;
       this.settleLife = 0;
+      this.shelf = null;
+      this.shelfBucket = -1;
+      this.ignoreShelf = null;
+      this.shelfIgnoreFrames = 0;
       
       // Kunduzgi och fonlarda ham aniq ko'rinadigan sakura ranglari
       const colors = [
@@ -137,8 +174,16 @@
           this.pushVx += Math.cos(angle) * force * 0.45;
           this.pushVy += Math.sin(angle) * force * 0.45;
           this.rotationSpeed += (Math.random() - 0.5) * 0.06;
+          if (this.settled) {
+            this.ignoreShelf = this.shelf;
+            this.shelfIgnoreFrames = 30;
+            this.release();
+          }
         }
       }
+
+      if (this.shelfIgnoreFrames > 0) this.shelfIgnoreFrames--;
+      else this.ignoreShelf = null;
 
       // Kuchning sekin-asta so'nishi (inersiya)
       this.pushVx *= 0.92;
@@ -146,50 +191,38 @@
 
       if (this.settled) {
         this.settleLife--;
-        this.x += this.pushVx + Math.sin(this.flip) * 0.08;
+        this.x += Math.sin(this.flip) * 0.08;
         this.flip += this.flipSpeed * 0.35;
         this.rotation += this.rotationSpeed * 0.25;
         if (this.settleLife <= 0) {
-          this.settled = false;
+          this.release();
           this.y = -30;
         }
       } else {
-      // Pozitsiyani siljitish va tebranish berish
-      this.x += this.speedX + Math.sin(this.flip) * 0.7 + this.pushVx;
-      this.y += this.speedY + this.pushVy;
-      this.rotation += this.rotationSpeed;
-      this.flip += this.flipSpeed;
+        const previousY = this.y;
+        this.x += this.speedX + Math.sin(this.flip) * 0.7 + this.pushVx;
+        this.y += this.speedY + this.pushVy;
+        this.rotation += this.rotationSpeed;
+        this.flip += this.flipSpeed;
 
-        // Ayrim barglar mahsulot kartalarining ustiga to'planadi.
-        if (this.y > 220) {
-          const cards = document.querySelectorAll('.product-card');
-          for (let i = 0; i < cards.length; i++) {
-            if (Math.random() > 0.018) continue;
-            const rect = cards[i].getBoundingClientRect();
-            const cardTop = rect.top + scrollY;
-            const cardBottom = rect.bottom + scrollY;
-            if (
-              this.y >= cardTop - 12 &&
-              this.y <= cardBottom &&
-              this.x >= rect.left - 8 &&
-              this.x <= rect.right + 8
-            ) {
-              this.settled = true;
-              this.y = cardTop + Math.random() * Math.min(rect.height * 0.7, 180);
-              this.speedY = 0;
-              this.speedX = 0;
-              this.settleLife = 900 + Math.random() * 600;
-              break;
-            }
+        for (let i = 0; i < shelves.length; i++) {
+          const shelf = shelves[i];
+          if (shelf === this.ignoreShelf) continue;
+          const bucket = Math.floor((this.x - shelf.left) / 18);
+          if (bucket < 0 || bucket >= shelf.bucketCount) continue;
+
+          const pileHeight = shelf.buckets[bucket] * 8;
+          const landingY = shelf.y - pileHeight - this.size * 0.65;
+          if (previousY <= landingY && this.y >= landingY) {
+            this.settled = true;
+            this.y = landingY;
+            this.x = shelf.left + bucket * 18 + 9;
+            this.shelf = shelf;
+            this.shelfBucket = bucket;
+            shelf.buckets[bucket]++;
+            this.settleLife = 2400 + Math.random() * 1800;
+            break;
           }
-        }
-
-        // Sahifa pastida to'planish.
-        if (!this.settled && this.y > pageHeight - 105 - Math.random() * 90) {
-          this.settled = true;
-          this.speedY = 0;
-          this.speedX = 0;
-          this.settleLife = 700 + Math.random() * 700;
         }
       }
 
@@ -201,6 +234,18 @@
       } else if (this.x > width + 50) {
         this.x = -50;
       }
+    }
+
+    release() {
+      if (this.shelf && this.shelfBucket >= 0) {
+        this.shelf.buckets[this.shelfBucket] = Math.max(
+          0,
+          this.shelf.buckets[this.shelfBucket] - 1
+        );
+      }
+      this.shelf = null;
+      this.shelfBucket = -1;
+      this.settled = false;
     }
 
     draw() {
@@ -249,6 +294,7 @@
   // Animatsiya sikli
   function animate() {
     ctx.clearRect(0, 0, width, height);
+    updateShelves();
     for (let i = 0; i < petals.length; i++) {
       petals[i].update();
       petals[i].draw();
