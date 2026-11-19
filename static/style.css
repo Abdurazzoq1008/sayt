@@ -727,14 +727,12 @@ body::before {
   box-shadow: var(--shadow-lg);
 }
 
-@media (hover: hover) {
-  .product-card:hover {
-    transform: perspective(1000px) rotateX(var(--tilt-x, 2deg)) rotateY(var(--tilt-y, -5deg)) translateY(-6px);
-  }
+.product-card.is-tilting {
+  transform: perspective(1000px) rotateX(var(--tilt-x, 2deg)) rotateY(var(--tilt-y, -5deg)) translateY(-6px);
+}
 
-  .product-card:nth-child(even):hover {
-    transform: perspective(1000px) rotateX(var(--tilt-x, 2deg)) rotateY(var(--tilt-y, 5deg)) translateY(-6px);
-  }
+.product-card:nth-child(even).is-tilting {
+  transform: perspective(1000px) rotateX(var(--tilt-x, 2deg)) rotateY(var(--tilt-y, 5deg)) translateY(-6px);
 }
 
 .card-img-wrap {

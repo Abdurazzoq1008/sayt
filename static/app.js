@@ -33,11 +33,13 @@ function setupEventListeners() {
       const tiltX = (0.5 - relativeY) * 4;
       const tiltY = sideBias + (0.5 - relativeX) * 4;
 
+      card.classList.add('is-tilting');
       card.style.setProperty('--tilt-x', tiltX.toFixed(2) + 'deg');
       card.style.setProperty('--tilt-y', tiltY.toFixed(2) + 'deg');
     });
 
     card.addEventListener('pointerleave', () => {
+      card.classList.remove('is-tilting');
       card.style.removeProperty('--tilt-x');
       card.style.removeProperty('--tilt-y');
     });
